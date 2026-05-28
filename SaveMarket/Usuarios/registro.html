@@ -1,40 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Registro</title>
+    <meta charset="UTF-8">
 
-  <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Registro</title>
+
+    {% load static %}
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
 </head>
 <body>
 
-  <div class="container">
+    <div class="container">
 
-    <div class="card">
+        <div class="card">
 
-      <h1>Registrar Usuário</h1>
+            <h1>Registrar Usuário</h1>
 
-      <input type="text" id="nome" placeholder="Nome">
+            {% if messages %}
+                {% for message in messages %}
 
-      <input type="email" id="email" placeholder="E-mail">
+                    <p class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </p>
 
-      <input type="password" id="senha" placeholder="Senha">
+                {% endfor %}
+            {% endif %}
 
-      <button onclick="registrarUsuario()">
-        Registrar
-      </button>
+            <form method="POST">
 
-      <a href="login.html" class="link">
-        Voltar para Login
-      </a>
+                {% csrf_token %}
+
+                <input
+                    type="text"
+                    name="nome"
+                    placeholder="Nome"
+                    required
+                >
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="E-mail"
+                    required
+                >
+
+                <input
+                    type="password"
+                    name="senha"
+                    placeholder="Senha"
+                    required
+                >
+
+                <button type="submit">
+                    Registrar
+                </button>
+
+            </form>
+
+            <a href="/" class="link">
+                Voltar para Login
+            </a>
+
+        </div>
 
     </div>
-
-  </div>
-
-  <script src="js/script.js"></script>
 
 </body>
 </html>
