@@ -25,7 +25,12 @@ SECRET_KEY = "django-insecure-=7+28i5+(r7&i_x3e&*&*!%nou96bc3!@w^-5t-b5%)1ugqs0k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = [
+    'https://localhost:8000', 
+    'http://localhost:8000',
+]
 
 
 # Application definition
@@ -37,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "SaveMarket",
 ]
 
 MIDDLEWARE = [
