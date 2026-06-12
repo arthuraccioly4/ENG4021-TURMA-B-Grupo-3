@@ -18,6 +18,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -25,4 +29,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('registro/', views.registro_view, name='registro'),
     path('login/', views.login_view, name='login'),
-]
+    path('perfil/', views.perfil_view, name='perfil'),
+    path('produto/', views.produto_view, name='produto'),
+    path('produto/<int:pk>/', views.produto_view, name='produto_detalhe'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -5,146 +5,229 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SaveMarket</title>
-
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-
-    <!-- Ícones -->
-    <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
 <body>
 
-    <div class="container">
+<header class="navbar">
+    <div class="navbar-inner">
+        <div class="brand">
+            <i class="fa-solid fa-tag brand-icon"></i>
+            <span class="brand-name">Save<strong>Market</strong></span>
+        </div>
 
-        <!-- TOPO -->
-        <header class="topo">
-
-            <div class="localizacao">
-                <div class="icone-local">
-                    <i class="fa-solid fa-location-dot"></i>
-                </div>
-
-                <div>
-                    <p class="entregar">Entregar para</p>
-                    <h3>Rio de Janeiro - Brasil</h3>
-                </div>
-            </div>
-
-            <div class="icones-topo">
-                <i class="fa-solid fa-gift"></i>
-                <i class="fa-regular fa-bell"></i>
-            </div>
-
-        </header>
-
-        <!-- PESQUISA -->
-        <div class="pesquisa">
-
+        <form class="search-bar" method="get" action="{% url 'home' %}">
             <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" name="q" placeholder="Buscar produtos perto do vencimento..." value="{{ request.GET.q }}">
+            <button type="submit">Buscar</button>
+        </form>
 
-            <input type="text" placeholder="Pesquisar produtos">
+        <nav class="nav-links">
+            <a href="#categorias"><i class="fa-solid fa-table-cells-large"></i> Categorias</a>
+            <a href="{% url 'produto' %}"><i class="fa-solid fa-cart-shopping"></i> Carrinho</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'perfil' %}" class="btn-nav">
+                    <i class="fa-regular fa-user"></i> {{ user.first_name|default:user.username }}
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn-nav">Entrar</a>
+                <a href="{% url 'registro' %}" class="btn-nav btn-primary">Cadastrar</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
 
+<main>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-text">
+            <span class="hero-tag">Menos desperdício, mais economia</span>
+            <h1>Produtos com desconto <span class="highlight">perto do vencimento</span></h1>
+            <p>Encontre ofertas reais de mercados, restaurantes e padarias perto de você.</p>
+            <form class="hero-search" method="get" action="{% url 'home' %}">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" name="q" placeholder="O que você procura?" value="{{ request.GET.q }}">
+                <button type="submit">Buscar</button>
+            </form>
         </div>
-
-        <!-- BANNER -->
-        <section class="banner">
-            <p>(Produtos em alta)</p>
-        </section>
-
-        <!-- BOLINHAS -->
-        <div class="bolinhas">
-            <span class="ativa"></span>
-            <span></span>
-            <span></span>
+        <div class="hero-badges">
+            <span><i class="fa-solid fa-building-columns"></i> Mercados</span>
+            <span><i class="fa-solid fa-utensils"></i> Restaurantes</span>
+            <span><i class="fa-solid fa-bread-slice"></i> Padarias</span>
+            <span><i class="fa-solid fa-leaf"></i> Hortifruti</span>
         </div>
+    </section>
+
+    <div class="page-body">
 
         <!-- CATEGORIAS -->
-        <section class="categorias">
-
-            <div class="titulo-categoria">
+        <section class="section" id="categorias">
+            <div class="section-header">
                 <h2>Comprar por categoria</h2>
-                <a href="#">Ver tudo</a>
+                <a href="{% url 'home' %}" class="ver-tudo">Ver tudo</a>
             </div>
-
-            <div class="grid-categorias">
-
-                <div class="categoria">
-                    <div class="imagem-categoria"></div>
-                    <p>Frutas</p>
-                </div>
-
-                <div class="categoria">
-                    <div class="imagem-categoria"></div>
-                    <p>Vegetais</p>
-                </div>
-
-                <div class="categoria">
-                    <div class="imagem-categoria"></div>
-                    <p>Carnes</p>
-                </div>
-
-                <div class="categoria">
-                    <div class="imagem-categoria"></div>
-                    <p>Lanches</p>
-                </div>
-
-                <div class="categoria">
-                    <div class="imagem-categoria"></div>
-                    <p>Congelados</p>
-                </div>
-
-                <div class="categoria">
-                    <div class="imagem-categoria"></div>
-                    <p>Padaria</p>
-                </div>
-
-                <div class="categoria">
-                    <div class="imagem-categoria"></div>
-                    <p>Despensa</p>
-                </div>
-
-                <div class="categoria">
-                    <div class="imagem-categoria"></div>
-                    <p>Bebidas</p>
-                </div>
-
+            <div class="categorias-grid">
+                <a href="?categoria=frutas" class="categoria-card">
+                    <div class="categoria-icon"><i class="fa-solid fa-apple-whole"></i></div>
+                    <span>Frutas</span>
+                </a>
+                <a href="?categoria=vegetais" class="categoria-card">
+                    <div class="categoria-icon"><i class="fa-solid fa-seedling"></i></div>
+                    <span>Vegetais</span>
+                </a>
+                <a href="?categoria=carnes" class="categoria-card">
+                    <div class="categoria-icon"><i class="fa-solid fa-drumstick-bite"></i></div>
+                    <span>Carnes</span>
+                </a>
+                <a href="?categoria=lanches" class="categoria-card">
+                    <div class="categoria-icon"><i class="fa-solid fa-burger"></i></div>
+                    <span>Lanches</span>
+                </a>
+                <a href="?categoria=congelados" class="categoria-card">
+                    <div class="categoria-icon"><i class="fa-solid fa-snowflake"></i></div>
+                    <span>Congelados</span>
+                </a>
+                <a href="?categoria=padaria" class="categoria-card">
+                    <div class="categoria-icon"><i class="fa-solid fa-bread-slice"></i></div>
+                    <span>Padaria</span>
+                </a>
+                <a href="?categoria=despensa" class="categoria-card">
+                    <div class="categoria-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                    <span>Despensa</span>
+                </a>
+                <a href="?categoria=bebidas" class="categoria-card">
+                    <div class="categoria-icon"><i class="fa-solid fa-bottle-water"></i></div>
+                    <span>Bebidas</span>
+                </a>
             </div>
-
         </section>
 
-        <!-- MENU INFERIOR -->
-        <nav class="menu-inferior">
+        <!-- MERCADOS PARCEIROS -->
+        {% if mercados %}
+        <section class="section">
+            <div class="section-header">
+                <h2>Mercados Parceiros</h2>
+            </div>
+            <div class="mercados-grid">
+                {% for mercado in mercados %}
+                <div class="mercado-card">
+                    <div class="mercado-icon"><i class="fa-solid fa-store"></i></div>
+                    <div class="mercado-info">
+                        <strong>{{ mercado.nome }}</strong>
+                        <span><i class="fa-solid fa-location-dot"></i> {{ mercado.endereco }}</span>
+                        <span class="mercado-count">{{ mercado.produtos.count }} produto{{ mercado.produtos.count|pluralize }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
 
-            <div class="menu-item ativo">
-                <i class="fa-solid fa-house"></i>
-                <p>Home</p>
+        <!-- PRODUTOS -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-clock"></i> Vence em breve</h2>
+                <div class="sort-wrap">
+                    <label for="sort">Ordenar:</label>
+                    <select id="sort" onchange="applySort(this.value)">
+                        <option value="validade" {% if request.GET.sort == 'validade' or not request.GET.sort %}selected{% endif %}>Por validade</option>
+                        <option value="desconto" {% if request.GET.sort == 'desconto' %}selected{% endif %}>Maior desconto</option>
+                        <option value="preco" {% if request.GET.sort == 'preco' %}selected{% endif %}>Menor preço</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="menu-item">
-                <i class="fa-solid fa-table-cells-large"></i>
-                <p>Categorias</p>
-            </div>
+            <div class="produtos-grid">
+                {% for produto in produtos %}
+                <div class="produto-card">
+                    <div class="produto-img">
+                        {% if produto.imagem %}
+                            <img src="{{ produto.imagem.url }}" alt="{{ produto.titulo }}">
+                        {% else %}
+                            <div class="produto-img-placeholder">
+                                <i class="fa-solid fa-box-open"></i>
+                            </div>
+                        {% endif %}
 
-            <div class="menu-item">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <p>Carrinho</p>
-            </div>
+                        {% with dias=produto.dias_para_vencer %}
+                            {% if dias == 0 %}
+                                <span class="validade-tag urgente">Vence hoje</span>
+                            {% elif dias == 1 %}
+                                <span class="validade-tag urgente">Vence amanhã</span>
+                            {% elif dias <= 3 %}
+                                <span class="validade-tag aviso">{{ dias }} dias</span>
+                            {% else %}
+                                <span class="validade-tag normal">{{ dias }} dias</span>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
 
-            <div class="menu-item">
-                <i class="fa-regular fa-clipboard"></i>
-                <p>Pedidos</p>
-            </div>
+                    <div class="produto-info">
+                        <p class="produto-mercado">
+                            <i class="fa-solid fa-store"></i> {{ produto.mercado.nome }}
+                        </p>
+                        <h3 class="produto-titulo">{{ produto.titulo }}</h3>
+                        <div class="produto-precos">
+                            <span class="preco-novo">R$ {{ produto.preco_desconto|floatformat:2 }}</span>
+                            <span class="preco-antigo">R$ {{ produto.preco_original|floatformat:2 }}</span>
+                            <span class="desconto-pill">-{{ produto.percentual_desconto }}%</span>
+                        </div>
+                    </div>
 
-            <div class="menu-item">
-                <i class="fa-regular fa-user"></i>
-                <p>Perfil</p>
+                    <div class="produto-footer">
+                        <form method="post" action="#">
+                            {% csrf_token %}
+                            <input type="hidden" name="produto_id" value="{{ produto.pk }}">
+                            <button type="submit" class="btn-adicionar">
+                                <i class="fa-solid fa-cart-plus"></i> Adicionar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="empty-state">
+                    <i class="fa-solid fa-box-open"></i>
+                    <p>Nenhum produto disponível no momento.</p>
+                </div>
+                {% endfor %}
             </div>
-
-        </nav>
+        </section>
 
     </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="brand-name">Save<strong>Market</strong></span>
+            <p>Conectamos consumidores a produtos com desconto perto do vencimento.</p>
+        </div>
+        <div class="footer-links">
+            <h4>Navegação</h4>
+            <a href="{% url 'home' %}">Início</a>
+            <a href="{% url 'login' %}">Entrar</a>
+            <a href="{% url 'registro' %}">Cadastrar</a>
+        </div>
+        <div class="footer-links">
+            <h4>Projeto</h4>
+            <p>ENG4021 — Turma B</p>
+            <p>Grupo 3</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 SaveMarket</p>
+    </div>
+</footer>
+
+<script>
+function applySort(value) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('sort', value);
+    window.location.href = url.toString();
+}
+</script>
 
 </body>
 </html>

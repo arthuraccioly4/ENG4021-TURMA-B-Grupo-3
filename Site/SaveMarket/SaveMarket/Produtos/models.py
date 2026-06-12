@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
  
  
 class MercadoParceiro(models.Model):
@@ -43,3 +44,8 @@ class Produto(models.Model):
             desconto = (1 - self.preco_desconto / self.preco_original) * 100
             return round(desconto, 1)
         return 0
+
+    @property
+    def dias_para_vencer(self):
+      delta = self.validade - timezone.now().date()
+      return max(delta.days, 0)
