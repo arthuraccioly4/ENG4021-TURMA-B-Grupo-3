@@ -22,6 +22,12 @@ class Produto(models.Model):
         verbose_name="Mercado Parceiro",
     )
     titulo = models.CharField(max_length=255, verbose_name="Título")
+
+    categoria = models.CharField(
+    max_length=100,
+    verbose_name="Categoria",
+    default="Outros"
+    )
     preco_original = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name="Preço Original"
     )

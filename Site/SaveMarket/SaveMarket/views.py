@@ -5,16 +5,27 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from SaveMarket.Produtos.models import Produto, MercadoParceiro
-
+from django.db.models import Q
 
 def home(request):
     produtos = Produto.objects.filter(validade__gte=timezone.now().date())
     mercados = MercadoParceiro.objects.all()
 
     # Busca
+    # Busca
     q = request.GET.get('q', '')
+
     if q:
-        produtos = produtos.filter(titulo__icontains=q)
+        produtos = produtos.filter(
+         Q(titulo__icontains=q) |
+         Q(mercado__nome__icontains=q)
+    )
+
+    # Filtro por categoria
+    categoria = request.GET.get('categoria', '')
+
+    if categoria:
+        produtos = produtos.filter(categoria__iexact=categoria)
 
     # Ordenação
     sort = request.GET.get('sort', 'validade')
@@ -26,9 +37,11 @@ def home(request):
         produtos = produtos.order_by('validade')
 
     return render(request, 'home.html', {
-        'produtos': produtos,
-        'mercados': mercados,
+    'produtos': produtos,
+    'mercados': mercados,
+    'categoria': categoria,
     })
+    
 
 
 def produto_view(request, pk=None):
@@ -77,7 +90,7 @@ def login_view(request):
         usuario = authenticate(request, username=username, password=password)
         if usuario is not None:
             login(request, usuario)
-            return redirect('home')
+            return redirect('ofertas')
         else:
             mensagem = 'E-mail ou senha incorretos.'
     return render(request, 'login.html', {'mensagem': mensagem})
