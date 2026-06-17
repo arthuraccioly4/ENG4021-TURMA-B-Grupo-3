@@ -1,9 +1,18 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect 
+from django.contrib.auth import authenticate, login
+from .models import Produto 
+
 
 def home(request):
-    return render(request, 'home.html')
+    ofertas = Produto.objects.all()
+
+    ordenacao = request.GET.get('ordenar')
+    if ordenacao == 'menor_preco':
+        ofertas = ofertas.order_by('preco_desconto')
+
+    return render(request, 'home.html', {'ofertas': ofertas})
 
 @staff_member_required  # só admin acessa
 def admin_usuarios(request):
