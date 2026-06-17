@@ -17,14 +17,19 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from . import views
+from django.conf import settings
+from django.conf.urls.static import static
+from SaveMarket import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('admin/usuarios/', views.admin_usuarios, name='admin_usuarios'),
     path('', views.home, name='home'),
+    path('ofertas/', views.home, name='ofertas'),
     path('registro/', views.registro_view, name='registro'),
     path('login/', views.login_view, name='login'),
     path('perfil/', views.perfil_view, name='perfil'),
     path('produto/', views.produto_view, name='produto'),
-]
+    path('produto/<int:pk>/', views.produto_view, name='produto_detalhe'),
+    path('mercado/<int:pk>/', views.mercado_view, name='mercado'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
