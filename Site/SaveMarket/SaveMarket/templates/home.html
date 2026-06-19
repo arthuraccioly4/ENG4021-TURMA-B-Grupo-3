@@ -13,22 +13,22 @@
 <header class="navbar">
     <div class="navbar-inner">
         <div class="brand">
-            <i class="fa-solid fa-tag brand-icon"></i>
+            <span class="brand-icon">🏷️</span>
             <span class="brand-name">Save<strong>Market</strong></span>
         </div>
 
         <form class="search-bar" method="get" action="{% url 'home' %}">
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <span class="icon-emoji">🔍</span>
             <input type="text" name="q" placeholder="Buscar produtos perto do vencimento..." value="{{ request.GET.q }}">
             <button type="submit">Buscar</button>
         </form>
 
         <nav class="nav-links">
-            <a href="#categorias"><i class="fa-solid fa-table-cells-large"></i> Categorias</a>
-            <a href="{% url 'produto' %}"><i class="fa-solid fa-cart-shopping"></i> Carrinho</a>
+            <a href="#categorias"><span class="icon-emoji">🗂️</span> Categorias</a>
+            <a href="{% url 'carrinho' %}"><span class="icon-emoji">🛒</span> Carrinho</a>
             {% if user.is_authenticated %}
                 <a href="{% url 'perfil' %}" class="btn-nav">
-                    <i class="fa-regular fa-user"></i> {{ user.first_name|default:user.username }}
+                    <span class="icon-emoji">👤</span> {{ user.first_name|default:user.username }}
                 </a>
             {% else %}
                 <a href="{% url 'login' %}" class="btn-nav">Entrar</a>
@@ -47,16 +47,16 @@
             <h1>Produtos com desconto <span class="highlight">perto do vencimento</span></h1>
             <p>Encontre ofertas reais de mercados, restaurantes e padarias perto de você.</p>
             <form class="hero-search" method="get" action="{% url 'home' %}">
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <span class="icon-emoji">🔍</span>
                 <input type="text" name="q" placeholder="O que você procura?" value="{{ request.GET.q }}">
                 <button type="submit">Buscar</button>
             </form>
         </div>
         <div class="hero-badges">
-            <span><i class="fa-solid fa-building-columns"></i> Mercados</span>
-            <span><i class="fa-solid fa-utensils"></i> Restaurantes</span>
-            <span><i class="fa-solid fa-bread-slice"></i> Padarias</span>
-            <span><i class="fa-solid fa-leaf"></i> Hortifruti</span>
+            <span>🏬 Mercados</span>
+            <span>🍽️ Restaurantes</span>
+            <span>🥖 Padarias</span>
+            <span>🥬 Hortifruti</span>
         </div>
     </section>
 
@@ -70,35 +70,35 @@
             </div>
             <div class="categorias-grid">
                 <a href="?categoria=frutas" class="categoria-card">
-                    <div class="categoria-icon"><i class="fa-solid fa-apple-whole"></i></div>
+                    <div class="categoria-icon">🍎</div>
                     <span>Frutas</span>
                 </a>
                 <a href="?categoria=vegetais" class="categoria-card">
-                    <div class="categoria-icon"><i class="fa-solid fa-seedling"></i></div>
+                    <div class="categoria-icon">🥦</div>
                     <span>Vegetais</span>
                 </a>
                 <a href="?categoria=carnes" class="categoria-card">
-                    <div class="categoria-icon"><i class="fa-solid fa-drumstick-bite"></i></div>
+                    <div class="categoria-icon">🍗</div>
                     <span>Carnes</span>
                 </a>
                 <a href="?categoria=lanches" class="categoria-card">
-                    <div class="categoria-icon"><i class="fa-solid fa-burger"></i></div>
+                    <div class="categoria-icon">🍔</div>
                     <span>Lanches</span>
                 </a>
                 <a href="?categoria=congelados" class="categoria-card">
-                    <div class="categoria-icon"><i class="fa-solid fa-snowflake"></i></div>
+                    <div class="categoria-icon">🧊</div>
                     <span>Congelados</span>
                 </a>
                 <a href="?categoria=padaria" class="categoria-card">
-                    <div class="categoria-icon"><i class="fa-solid fa-bread-slice"></i></div>
+                    <div class="categoria-icon">🥖</div>
                     <span>Padaria</span>
                 </a>
                 <a href="?categoria=despensa" class="categoria-card">
-                    <div class="categoria-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                    <div class="categoria-icon">🥫</div>
                     <span>Despensa</span>
                 </a>
                 <a href="?categoria=bebidas" class="categoria-card">
-                    <div class="categoria-icon"><i class="fa-solid fa-bottle-water"></i></div>
+                    <div class="categoria-icon">🥤</div>
                     <span>Bebidas</span>
                 </a>
             </div>
@@ -113,10 +113,10 @@
             <div class="mercados-grid">
                 {% for mercado in mercados %}
                 <div class="mercado-card">
-                    <div class="mercado-icon"><i class="fa-solid fa-store"></i></div>
+                    <div class="mercado-icon">🏬</div>
                     <div class="mercado-info">
                         <strong>{{ mercado.nome }}</strong>
-                        <span><i class="fa-solid fa-location-dot"></i> {{ mercado.endereco }}</span>
+                        <span>📍 {{ mercado.endereco }}</span>
                         <span class="mercado-count">{{ mercado.produtos.count }} produto{{ mercado.produtos.count|pluralize }}</span>
                     </div>
                 </div>
@@ -128,7 +128,7 @@
         <!-- PRODUTOS -->
         <section class="section">
             <div class="section-header">
-                <h2><i class="fa-solid fa-clock"></i> Vence em breve</h2>
+                <h2>⏰ Vence em breve</h2>
                 <div class="sort-wrap">
                     <label for="sort">Ordenar:</label>
                     <select id="sort" onchange="applySort(this.value)">
@@ -147,7 +147,7 @@
                             <img src="{{ produto.imagem.url }}" alt="{{ produto.titulo }}">
                         {% else %}
                             <div class="produto-img-placeholder">
-                                <i class="fa-solid fa-box-open"></i>
+                                📦
                             </div>
                         {% endif %}
 
@@ -166,7 +166,7 @@
 
                     <div class="produto-info">
                         <p class="produto-mercado">
-                            <i class="fa-solid fa-store"></i> {{ produto.mercado.nome }}
+                            🏬 {{ produto.mercado.nome }}
                         </p>
                         <h3 class="produto-titulo">{{ produto.titulo }}</h3>
                         <div class="produto-precos">
@@ -177,18 +177,17 @@
                     </div>
 
                     <div class="produto-footer">
-                        <form method="post" action="#">
+                        <form method="post" action="{% url 'adicionar_carrinho' produto.pk %}">
                             {% csrf_token %}
-                            <input type="hidden" name="produto_id" value="{{ produto.pk }}">
                             <button type="submit" class="btn-adicionar">
-                                <i class="fa-solid fa-cart-plus"></i> Adicionar
+                                🛒 Adicionar
                             </button>
                         </form>
                     </div>
                 </div>
                 {% empty %}
                 <div class="empty-state">
-                    <i class="fa-solid fa-box-open"></i>
+                    📦
                     <p>Nenhum produto disponível no momento.</p>
                 </div>
                 {% endfor %}

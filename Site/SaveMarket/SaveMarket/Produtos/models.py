@@ -29,7 +29,8 @@ class Produto(models.Model):
         max_digits=10, decimal_places=2, verbose_name="Preço com Desconto"
     )
     validade = models.DateField(verbose_name="Validade")
- 
+    imagem = models.URLField(max_length=500, blank=True, null=True, verbose_name="URL da Imagem")
+
     class Meta:
         verbose_name = "Produto"
         verbose_name_plural = "Produtos"
