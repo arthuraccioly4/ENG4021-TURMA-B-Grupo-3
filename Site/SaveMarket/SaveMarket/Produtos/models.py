@@ -1,7 +1,13 @@
 from django.db import models
 from django.utils import timezone
+<<<<<<< HEAD
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+=======
+from django.contrib.auth.models import User
+ 
+ 
+>>>>>>> 8843cb6e868a64b6e45860d0a7f83e37e8040562
 class MercadoParceiro(models.Model):
     nome = models.CharField(max_length=255, verbose_name="Nome")
     endereco = models.CharField(max_length=500, verbose_name="Endereço")
@@ -33,9 +39,13 @@ class Produto(models.Model):
         max_digits=10, decimal_places=2, verbose_name="Preço com Desconto"
     )
     validade = models.DateField(verbose_name="Validade")
+<<<<<<< HEAD
     
     
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name="Adicionado em")
+=======
+    imagem = models.URLField(max_length=500, blank=True, null=True, verbose_name="URL da Imagem")
+>>>>>>> 8843cb6e868a64b6e45860d0a7f83e37e8040562
 
     class Meta:
         verbose_name = "Produto"
@@ -54,6 +64,7 @@ class Produto(models.Model):
 
     @property
     def dias_para_vencer(self):
+<<<<<<< HEAD
         delta = self.validade - timezone.now().date()
         return max(delta.days, 0)
 
@@ -71,3 +82,20 @@ class Avaliacao(models.Model):
 
     def __str__(self):
         return f"{self.nota} estrelas - {self.produto.titulo}"
+=======
+      delta = self.validade - timezone.now().date()
+      return max(delta.days, 0)
+
+class Favorito(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favoritos')
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='favoritado_por')
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('usuario', 'produto')
+        verbose_name = "Favorito"
+        verbose_name_plural = "Favoritos"
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.produto.titulo}"
+>>>>>>> 8843cb6e868a64b6e45860d0a7f83e37e8040562

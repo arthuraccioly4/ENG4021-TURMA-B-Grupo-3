@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho — SaveMarket</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/carrinho.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+
+<header class="navbar">
+    <div class="navbar-inner">
+        <div class="brand">
+            <i class="fa-solid fa-tag brand-icon"></i>
+            <span class="brand-name">Save<strong>Market</strong></span>
+        </div>
+
+        <nav class="nav-links">
+            <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i> Início</a>
+            <a href="{% url 'carrinho' %}"><i class="fa-solid fa-cart-shopping"></i> Carrinho</a>
+            <a href="{% url 'perfil' %}" class="btn-nav">
+                <i class="fa-regular fa-user"></i> {{ user.first_name|default:user.username }}
+            </a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="page-body">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert-msg">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <h1 class="page-title"><i class="fa-solid fa-cart-shopping"></i> Meu carrinho</h1>
+
+        {% if itens %}
+            <div class="cart-layout">
+
+                <div class="cart-items">
+                    {% for item in itens %}
+                    <div class="cart-item">
+                        <div class="cart-item-img">
+                            {% if item.produto.imagem %}
+                                <img src="{{ item.produto.imagem }}" alt="{{ item.produto.titulo }}">
+                            {% else %}
+                                <div class="produto-img-placeholder">
+                                    <i class="fa-solid fa-box-open"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="cart-item-info">
+                            <strong>{{ item.produto.titulo }}</strong>
+                            <span class="cart-item-mercado">
+                                <i class="fa-solid fa-store"></i> {{ item.produto.mercado.nome }}
+                            </span>
+                            <span class="cart-item-validade">
+                                Vence em {{ item.produto.validade|date:"d/m/Y" }}
+                            </span>
+                        </div>
+
+                        <form method="post" action="{% url 'atualizar_carrinho' item.produto.pk %}" class="cart-item-qty">
+                            {% csrf_token %}
+                            <label>Qtd:</label>
+                            <input type="number" name="quantidade" value="{{ item.quantidade }}" min="0" max="99"
+                                   onchange="this.form.submit()">
+                        </form>
+
+                        <div class="cart-item-price">
+                            <span class="preco-novo">R$ {{ item.subtotal_desconto|floatformat:2 }}</span>
+                            <span class="preco-antigo">R$ {{ item.subtotal_original|floatformat:2 }}</span>
+                        </div>
+
+                        <a href="{% url 'remover_carrinho' item.produto.pk %}" class="btn-remover" title="Remover">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="cart-summary">
+                    <h2>Resumo do pedido</h2>
+
+                    <div class="summary-line">
+                        <span>Subtotal</span>
+                        <span>R$ {{ total_original|floatformat:2 }}</span>
+                    </div>
+                    <div class="summary-line discount">
+                        <span>Desconto</span>
+                        <span>− R$ {{ economia|floatformat:2 }}</span>
+                    </div>
+                    <div class="summary-divider"></div>
+                    <div class="summary-line total">
+                        <span>Total</span>
+                        <span>R$ {{ total_com_desconto|floatformat:2 }}</span>
+                    </div>
+
+                    <div class="savings-box">
+                        <i class="fa-solid fa-piggy-bank"></i>
+                        Você está economizando <strong>R$ {{ economia|floatformat:2 }}</strong>!
+                    </div>
+
+                    <button class="btn-adicionar btn-full" disabled>
+                        Finalizar pedido (em breve)
+                    </button>
+                </div>
+
+            </div>
+        {% else %}
+            <div class="empty-cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <h2>Seu carrinho está vazio</h2>
+                <p>Explore produtos com desconto perto de você.</p>
+                <a href="{% url 'home' %}" class="btn-adicionar">Ver produtos</a>
+            </div>
+        {% endif %}
+
+    </div>
+</main>
+
+</body>
+</html>
