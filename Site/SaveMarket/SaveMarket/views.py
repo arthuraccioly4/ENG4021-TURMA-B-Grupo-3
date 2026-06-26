@@ -8,7 +8,6 @@ from datetime import timedelta
 from SaveMarket.Produtos.models import Produto, MercadoParceiro, Favorito
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth import authenticate, login
 
 
 def home(request):
