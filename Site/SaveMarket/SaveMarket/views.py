@@ -7,8 +7,7 @@ from django.utils import timezone
 from datetime import timedelta
 from SaveMarket.Produtos.models import Produto, MercadoParceiro, Favorito
 from django.db.models import Q
-from django.contrib.auth import authenticate, login
-from SaveMarket.Produtos.models import Produto, MercadoParceiro
+from django.contrib.auth import authenticate, login, logout
 
 def home(request):
     produtos = Produto.objects.filter(validade__gte=timezone.now().date())
@@ -113,9 +112,64 @@ def login_view(request):
             mensagem = 'E-mail ou senha incorretos.'
     return render(request, 'login.html', {'mensagem': mensagem})
 
+#####INICIO PERFIL#####
 @login_required
 def perfil_view(request):
     return render(request, 'perfil.html')
+
+@login_required
+def meus_dados_view(request):
+    if request.method == 'POST':
+        user = request.user
+        user.first_name = request.POST.get('first_name', '')
+        user.last_name = request.POST.get('last_name', '')
+        user.email = request.POST.get('email', '')
+        user.save()
+ 
+        # Atualiza telefone no Perfil (criado automaticamente via signal)
+        user.perfil.telefone = request.POST.get('telefone', '')
+        user.perfil.save()
+ 
+        messages.success(request, 'Dados atualizados com sucesso!')
+        return redirect('meus_dados')
+ 
+    return render(request, 'meus_dados.html')
+ 
+ 
+@login_required
+def enderecos_view(request):
+    if request.method == 'POST':
+        Endereco.objects.create(
+            user=request.user,
+            rua=request.POST.get('rua'),
+            numero=request.POST.get('numero'),
+            bairro=request.POST.get('bairro'),
+            cidade=request.POST.get('cidade'),
+            estado=request.POST.get('estado').upper(),
+            cep=request.POST.get('cep'),
+        )
+        messages.success(request, 'Endereço adicionado com sucesso!')
+        return redirect('enderecos')
+ 
+    enderecos = request.user.enderecos.all()
+    return render(request, 'enderecos.html', {'enderecos': enderecos})
+ 
+ 
+@login_required
+def remover_endereco_view(request, pk):
+    endereco = get_object_or_404(Endereco, pk=pk, user=request.user)
+    endereco.delete()
+    messages.success(request, 'Endereço removido.')
+    return redirect('enderecos')
+ 
+ 
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
+#####FINAL PERFIL#####
+
+
 
 @login_required
 def carrinho_view(request):

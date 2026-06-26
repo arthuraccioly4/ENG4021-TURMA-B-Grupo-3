@@ -14,7 +14,7 @@
 
     <div class="perfil-container">
         <a href="{% url 'home' %}" style="display: flex; align-items: center; text-decoration: none; color: #333; margin-bottom: 20px; font-weight: bold;">
-            <i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Voltar para Ofertas
+            ← Voltar para Ofertas
         </a>
 
         <div class="perfil-topo">
@@ -23,46 +23,53 @@
 
         <div class="perfil-info">
 
-            <div class="foto-perfil"></div>
+            {% if request.user.perfil.foto %}
+                <img src="{{ request.user.perfil.foto.url }}" class="foto-perfil" alt="Foto de perfil">
+            {% else %}
+                <div class="foto-perfil"></div>
+            {% endif %}
 
-            <h2>Julio Diniz</h2>
+            <h2>{{ request.user.get_full_name|default:request.user.username }}</h2>
 
-            <p>blablabbla@gmail.com</p>
+            <p>{{ request.user.email }}</p>
 
         </div>
 
         <div class="menu-perfil">
 
-            <div class="opcao">
+            <a href="{% url 'meus_dados' %}" class="opcao">
                 <span>Meus Dados</span>
                 <span>></span>
-            </div>
+            </a>
 
-            <div class="opcao">
+            <a href="{% url 'enderecos' %}" class="opcao">
                 <span>Endereços</span>
                 <span>></span>
-            </div>
+            </a>
 
-            <div class="opcao">
+            <div class="opcao opcao-desativada">
                 <span>Métodos de Pagamento</span>
                 <span>></span>
             </div>
 
-            <div class="opcao">
+            <div class="opcao opcao-desativada">
                 <span>Pedidos</span>
                 <span>></span>
             </div>
 
-            <div class="opcao">
+            <div class="opcao opcao-desativada">
                 <span>Ajuda</span>
                 <span>></span>
             </div>
 
         </div>
 
-        <button class="btn-sair">
-            Sair da Conta
-        </button>
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-sair">
+                Sair da Conta
+            </button>
+        </form>
 
     </div>
 

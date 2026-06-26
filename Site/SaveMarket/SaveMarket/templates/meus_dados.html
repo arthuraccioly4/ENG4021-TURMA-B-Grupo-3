@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meus Dados</title>
+
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+</head>
+<body>
+
+    <div class="perfil-container">
+        <a href="{% url 'perfil' %}" style="display: flex; align-items: center; text-decoration: none; color: #333; margin-bottom: 20px; font-weight: bold;">
+            ← Voltar para Perfil
+        </a>
+
+        <div class="perfil-topo">
+            <h1>Meus Dados</h1>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert-msg">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" class="form-dados">
+            {% csrf_token %}
+
+            <div class="campo">
+                <label for="first_name">Nome</label>
+                <input type="text" id="first_name" name="first_name" value="{{ request.user.first_name }}">
+            </div>
+
+            <div class="campo">
+                <label for="last_name">Sobrenome</label>
+                <input type="text" id="last_name" name="last_name" value="{{ request.user.last_name }}">
+            </div>
+
+            <div class="campo">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" value="{{ request.user.email }}">
+            </div>
+
+            <div class="campo">
+                <label for="telefone">Telefone</label>
+                <input type="text" id="telefone" name="telefone" value="{{ request.user.perfil.telefone|default:'' }}" placeholder="(21) 99999-9999">
+            </div>
+
+            <button type="submit" class="btn-salvar">Salvar alterações</button>
+        </form>
+
+    </div>
+
+</body>
+</html> 

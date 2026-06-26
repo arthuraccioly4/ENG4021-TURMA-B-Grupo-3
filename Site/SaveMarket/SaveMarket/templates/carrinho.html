@@ -47,7 +47,7 @@
                     <div class="cart-item">
                         <div class="cart-item-img">
                             {% if item.produto.imagem %}
-                                <img src="{{ item.produto.imagem }}" alt="{{ item.produto.titulo }}">
+                                <img src="{{ item.produto.imagem.url }}" alt="{{ item.produto.titulo }}">
                             {% else %}
                                 <div class="produto-img-placeholder">
                                     <i class="fa-solid fa-box-open"></i>
