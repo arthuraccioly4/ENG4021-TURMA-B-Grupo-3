@@ -699,3 +699,61 @@ a {
     color: white;
 }
 
+/* ── TOAST / NOTIFICAÇÕES ── */
+#toast-container {
+    position: fixed;
+    top: 80px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+ 
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 260px;
+    max-width: 360px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateX(120%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+ 
+.toast.toast-show {
+    opacity: 1;
+    transform: translateX(0);
+}
+ 
+.toast-sucesso {
+    background: #1D9E75;
+}
+ 
+.toast-erro {
+    background: #E05252;
+}
+ 
+.toast-icone {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+ 
+/* responsivo: ocupa largura no mobile */
+@media (max-width: 480px) {
+    #toast-container {
+        right: 12px;
+        left: 12px;
+        top: 70px;
+    }
+    .toast {
+        min-width: 0;
+        max-width: 100%;
+    }
+}
