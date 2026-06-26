@@ -8,8 +8,6 @@ from datetime import timedelta
 from SaveMarket.Produtos.models import Produto, MercadoParceiro, Favorito
 from django.db.models import Q
 from django.contrib.auth import authenticate, login
-
-# Importação unificada das Models da sua equipe
 from SaveMarket.Produtos.models import Produto, MercadoParceiro
 
 def home(request):
