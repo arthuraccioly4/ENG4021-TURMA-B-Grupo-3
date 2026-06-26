@@ -8,6 +8,7 @@ from datetime import timedelta
 from SaveMarket.Produtos.models import Produto, MercadoParceiro, Favorito
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
 
 
 def home(request):
@@ -227,6 +228,37 @@ def carrinho_view(request):
 def adicionar_carrinho(request, pk):
     produto = get_object_or_404(Produto, pk=pk)
     carrinho = request.session.get('carrinho', {})
+    pk_str = str(pk)
+    eh_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+ 
+    # Verifica estoque (ajuste 'quantidade' para o nome do campo no seu model)
+    estoque = getattr(produto, 'quantidade', None)
+    quantidade_atual = carrinho.get(pk_str, 0)
+ 
+    if estoque is not None and quantidade_atual + 1 > estoque:
+        if eh_ajax:
+            return JsonResponse({
+                'sucesso': False,
+                'mensagem': f'"{produto.titulo}" está sem estoque suficiente.'
+            })
+        messages.error(request, f'"{produto.titulo}" está sem estoque suficiente.')
+        return redirect('home')
+ 
+    # Adiciona ao carrinho
+    carrinho[pk_str] = quantidade_atual + 1
+    request.session['carrinho'] = carrinho
+ 
+    if eh_ajax:
+        return JsonResponse({
+            'sucesso': True,
+            'mensagem': f'"{produto.titulo}" adicionado ao carrinho!',
+            'total_itens': sum(carrinho.values())
+        })
+ 
+    messages.success(request, f'"{produto.titulo}" adicionado ao carrinho.')
+    return redirect('home')
+    produto = get_object_or_404(Produto, pk=pk)
+    carrinho = request.session.get('carrinho', {})
 
     pk_str = str(pk)
     carrinho[pk_str] = carrinho.get(pk_str, 0) + 1
@@ -238,7 +270,6 @@ def adicionar_carrinho(request, pk):
 
     messages.success(request, f'"{produto.titulo}" adicionado ao carrinho.')
     return redirect('home')
- 
  
 @login_required
 def remover_carrinho(request, pk):
